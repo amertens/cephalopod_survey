@@ -25,7 +25,7 @@ res_ban_farming_adj = res_ban_sale_adj = res_ban_subsidies_adj = NULL
 
 dput(colnames(d))
 
-Wvars=c("COUNTRY", "URBANRURAL", "INCOME", "Gender", 
+Wvars=c("COUNTRY", "URBANRURAL", "income_cat", "Gender", 
         "Age", "Q1_awareness", "Q2_support", "Q4_welfare_knowledge", 
         "Q4_environmental_knowledge", "Q4_economic_knowledge", "Q4_sentience_knowledge", 
         "Q4_public_health_knowledge", "Q5_consumption_frequency", "Q6_impact_on_consumption")

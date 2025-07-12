@@ -11,11 +11,6 @@ d <- read.csv(here("data", "Octopus Farming - FINAL DATA - 030725.csv"))
 table(d$CONSENT)
 table(is.na(d$CONSENT))
 
-#drop unneeded/open ended variables
-d <- d %>% subset(., select= -c(CONSENT,ResponseID,ResponseID,REGION, Gender_3_Other, Q3a_1, Q3b_1, Q8a_1, Q8b_1))
-head(d)
-colnames(d)
-
 
 #-------------------------------------------------------------------------------
 # check messaging condition
@@ -42,6 +37,143 @@ table(d$URBANRURAL )
 #1: Male|2: Female|4: Non Binary|97: Prefer not to say|3: I identify in another way
 d$Gender <- factor(d$Gender, levels = c(1,2,3,4, 97), labels = c("Male","Female","I identify in another way","Non Binary","Prefer not to say"))
 table(d$Gender)
+
+#Income
+#1: Less than 15,000 EUR|2: 15,000 to 19,999 EUR|3: 20,000 to 29,999 EUR|4: 30,000 to 39,999 EUR|5: 40,000 to 49,999 EUR|6: 50,000 to 59,999 EUR|7: 60,000 to 69,999 EUR|
+#8: 70,000 to 79,999 EUR|9: 80,000 to 89,999 EUR|10: 90,000 to 99,999 EUR|11: 100,000 to 149,999 EUR|12: 150,000 to 199,999 EUR|
+#13: 200,000 to 249,999 EUR|14: 250,000 EUR and more|15: Less than 3 000 PLN (less than 251 PLN per month)|16: 3 001 - 6 000 PLN (251 - 500 PLN per month)|
+#17: 6 001 - 12 000 PLN (501 - 1 000 PLN per month)|18: 12 001 - 18 000 PLN (1 001 - 1 500 PLN per month)|19: 18 001 - 24 000 PLN (1 501 - 2 000 PLN per month)|
+#20: 24 001 - 30 000 PLN (2 001 - 2 500 PLN per month)|21: 30 001 - 36 000 PLN (2 501 - 3 000 PLN per month)|22: 36 001 - 48 000 PLN (3 001 - 4 000 PLN per month)|
+#23: 48 001 - 60 000 PLN (4 001 - 5 000 PLN per month)|24: 60 001 - 72 000 PLN (5 001 - 6 000 PLN per month)|25: 72 001 - 84 000 PLN (6 001 - 7 000 PLN per month)|
+#26: 84 001 - 96 000 PLN (7 001 - 8 000 PLN per month)|27: 96 001 - 108 000 PLN (8 001 - 9 000 PLN per month)|28: More than 108 000 PLN (more than 9 000 PLN per month)|
+#29: Less than £20,000|30: £20,000 - £29,999|31: £30,000 - £39,999|32: £40,000 - £49,999|33: £50,000 - £59,999|34: £60,000 - £69,999|35: £70,000 - £79,999|36: £80,000 or more|
+#37: Below 100,000 kr‎|38: 100,000 - 249,999 kr‎|39: 250,000-499,999 kr‎|40: 500,000 - 999,9999 kr‎|41: More than 1,000,000 kr|42: Below 100 000kr per year|43: 100 000kr-149 999kr|
+#44: 200 000kr -249 999kr|45: 250 000kr -299 999kr|46: 300 000kr -399 999kr|47: 400 000kr -499 999kr|48: 500 000kr -599 999kr|49: 600 000kr or more per year|50: Less than 30,000 Kč|
+#51: 30,000 Kč - 39,999 Kč|52: 40,000 Kč - 49,999 Kč|53: 50,000 Kč - 59,999 Kč|54: 60,000 Kč - 69,999 Kč|55: 70,000 Kč - 79,999 Kč|56: 80,000 Kč - 89,999 Kč|57: More than 90,000 Kč|
+#97: Prefer not to say
+
+d$INCOME <- factor(d$INCOME, levels = c(1:57, 97), 
+                   labels = c("Less than 15,000 EUR", "15,000 to 19,999 EUR", "20,000 to 29,999 EUR", "30,000 to 39,999 EUR", 
+                              "40,000 to 49,999 EUR", "50,000 to 59,999 EUR", "60,000 to 69,999 EUR", "70,000 to 79,999 EUR", 
+                              "80,000 to 89,999 EUR", "90,000 to 99,999 EUR", "100,000 to 149,999 EUR", "150,000 to 199,999 EUR", 
+                              "200,000 to 249,999 EUR", "250,000 EUR and more", "Less than 3 000 PLN (less than 251 PLN per month)", 
+                              "3 001 - 6 000 PLN (251 - 500 PLN per month)", "6 001 - 12 000 PLN (501 - 1 000 PLN per month)", 
+                              "12 001 - 18 000 PLN (1 001 - 1 500 PLN per month)", "18 001 - 24 000 PLN (1 501 - 2 000 PLN per month)", 
+                              "24 001 - 30 000 PLN (2 001 - 2 500 PLN per month)", "30 001 - 36 000 PLN (2 501 - 3 000 PLN per month)", 
+                              "36 001 - 48 000 PLN (3 001 - 4 000 PLN per month)", "48 001 - 60 000 PLN (4 001 -5.000 PLN per month)", 
+                              "60.001-72.000 PLN (5.001-6.000 PLN per month)", "72.001-84.000 PLN (6.001-7.000 PLN per month)", 
+                              "84.001-96.000 PLN (7.001-8.000 PLN per month)", "96.001-108.000 PLN (8.001-9.000 PLN per month)", 
+                              "More than108.000PLN (more than9.000PLN per month)", "Less than £20,000", "£20,000 - £29,999",
+                              "£30,000 - £39,999", "£40,000 - £49,999", "£50,000 - £59,999", "£60,000 - £69,999", 
+                              "£70,000 - £79,999", "£80,000 or more", "Below 100,000 kr‎", "100,000 - 249,999 kr‎",
+                              "250,000-499,999 kr‎", "500,000 - 999,9999 kr‎", "More than 1,000,000 kr",
+                              "Below 100 000kr per year", "100 000kr-149 999kr", "200 000kr -249 999kr",
+                              "250 000kr -299 999kr", "300 000kr -399 999kr", "400 000kr -499 999kr",
+                              "500 000kr -599 999kr", "600 000kr or more per year", "Less than 30,000 Kč",
+                              "30,000 Kč - 39,999 Kč", "40,000 Kč - 49,999 Kč", "50,000 Kč - 59,999 Kč",
+                              "60,000 Kč - 69,999 Kč", "70,000 Kč - 79,999 Kč", "80,000 Kč - 89,999 Kč",
+                              "More than 90,000 Kč", "Prefer not to say"))
+
+d <- d %>%
+  mutate(
+    income_cat = case_when(
+      INCOME == "Prefer not to say" ~ "No response",
+      
+      # EUR countries - Low income
+      COUNTRY %in% c("Slovenia", "France", "Germany", "Portugal", "Italy", "Spain", "Netherlands", "Greece", "Belgium") &
+        INCOME %in% c("Less than 15,000 EUR", "15,000 to 19,999 EUR", "20,000 to 29,999 EUR") ~ "Low",
+      
+      # EUR countries - Medium income
+      COUNTRY %in% c("Slovenia", "France", "Germany", "Portugal", "Italy", "Spain", "Netherlands", "Greece", "Belgium") &
+        INCOME %in% c("30,000 to 39,999 EUR", "40,000 to 49,999 EUR", "50,000 to 59,999 EUR") ~ "Medium",
+      
+      # EUR countries - High income
+      COUNTRY %in% c("Slovenia", "France", "Germany", "Portugal", "Italy", "Spain", "Netherlands", "Greece", "Belgium") &
+        INCOME %in% c("60,000 to 69,999 EUR", "70,000 to 79,999 EUR", "80,000 to 89,999 EUR", 
+                      "90,000 to 99,999 EUR", "100,000 to 149,999 EUR", "150,000 to 199,999 EUR", 
+                      "200,000 to 249,999 EUR", "250,000 EUR and more") ~ "High",
+      
+      # Poland - Low income (up to ~14k EUR equivalent)
+      COUNTRY == "Poland" & 
+        INCOME %in% c("Less than 3 000 PLN (less than 251 PLN per month)", 
+                      "3 001 - 6 000 PLN (251 - 500 PLN per month)", 
+                      "6 001 - 12 000 PLN (501 - 1 000 PLN per month)", 
+                      "12 001 - 18 000 PLN (1 001 - 1 500 PLN per month)", 
+                      "18 001 - 24 000 PLN (1 501 - 2 000 PLN per month)", 
+                      "24 001 - 30 000 PLN (2 001 - 2 500 PLN per month)", 
+                      "30 001 - 36 000 PLN (2 501 - 3 000 PLN per month)", 
+                      "36 001 - 48 000 PLN (3 001 - 4 000 PLN per month)", 
+                      "48 001 - 60 000 PLN (4 001 -5.000 PLN per month)") ~ "Low",
+      
+      # Poland - Medium income
+      COUNTRY == "Poland" & 
+        INCOME %in% c("60.001-72.000 PLN (5.001-6.000 PLN per month)", 
+                      "72.001-84.000 PLN (6.001-7.000 PLN per month)", 
+                      "84.001-96.000 PLN (7.001-8.000 PLN per month)", 
+                      "96.001-108.000 PLN (8.001-9.000 PLN per month)") ~ "Medium",
+      
+      # Poland - High income
+      COUNTRY == "Poland" & 
+        INCOME == "More than108.000PLN (more than9.000PLN per month)" ~ "High",
+      
+      # UK - Low income
+      COUNTRY == "UK" & 
+        INCOME %in% c("Less than £20,000", "£20,000 - £29,999") ~ "Low",
+      
+      # UK - Medium income
+      COUNTRY == "UK" & 
+        INCOME %in% c("£30,000 - £39,999", "£40,000 - £49,999", "£50,000 - £59,999") ~ "Medium",
+      
+      # UK - High income
+      COUNTRY == "UK" & 
+        INCOME %in% c("£60,000 - £69,999", "£70,000 - £79,999", "£80,000 or more") ~ "High",
+      
+      # Sweden - Low income
+      COUNTRY == "Sweden" & 
+        INCOME %in% c("Below 100,000 kr‎", "100,000 - 249,999 kr‎", "Below 100 000kr per year", 
+                      "100 000kr-149 999kr", "200 000kr -249 999kr") ~ "Low",
+      
+      # Sweden - Medium income
+      COUNTRY == "Sweden" & 
+        INCOME %in% c("250,000-499,999 kr‎", "500,000 - 999,9999 kr‎", "250 000kr -299 999kr", 
+                      "300 000kr -399 999kr", "400 000kr -499 999kr", "500 000kr -599 999kr") ~ "Medium",
+      
+      # Sweden - High income
+      COUNTRY == "Sweden" & 
+        INCOME %in% c("More than 1,000,000 kr", "600 000kr or more per year") ~ "High",
+      
+      # Denmark - Low income
+      COUNTRY == "Denmark" & 
+        INCOME %in% c("Below 100 000kr per year", "100 000kr-149 999kr", "200 000kr -249 999kr") ~ "Low",
+      
+      # Denmark - Medium income
+      COUNTRY == "Denmark" & 
+        INCOME %in% c("250 000kr -299 999kr", "300 000kr -399 999kr", "400 000kr -499 999kr") ~ "Medium",
+      
+      # Denmark - High income
+      COUNTRY == "Denmark" & 
+        INCOME %in% c("500 000kr -599 999kr", "600 000kr or more per year") ~ "High",
+      
+      # Czechia - Low income
+      COUNTRY == "Czechia" & 
+        INCOME %in% c("Less than 30,000 Kč", "30,000 Kč - 39,999 Kč", "40,000 Kč - 49,999 Kč", 
+                      "50,000 Kč - 59,999 Kč", "60,000 Kč - 69,999 Kč", "70,000 Kč - 79,999 Kč") ~ "Low",
+      
+      # Czechia - Medium income
+      COUNTRY == "Czechia" & 
+        INCOME == "80,000 Kč - 89,999 Kč" ~ "Medium",
+      
+      # Czechia - High income
+      COUNTRY == "Czechia" & 
+        INCOME == "More than 90,000 Kč" ~ "High",
+      
+      TRUE ~ NA_character_
+    ),
+    income_cat = factor(income_cat, levels = c("Low", "Medium", "High","No response"))
+  )
+
+# Verify the recoding
+table(d$income_cat, d$COUNTRY)
 
 # Age	How old are you?
 summary(d$Age)
@@ -124,6 +256,13 @@ d <- d %>% rename(
   Q9_vote_candidate_support = Q9
 )
 
+#drop unneeded/open ended variables
+d <- d %>% subset(., select= -c(CONSENT,ResponseID,ResponseID,REGION, Gender_3_Other, INCOME, Q3a_1, Q3b_1, Q8a_1, Q8b_1))
+head(d)
+colnames(d)
+
+
+d <- droplevels(d)
 
 #-------------------------------------------------------------------------------
 # save data

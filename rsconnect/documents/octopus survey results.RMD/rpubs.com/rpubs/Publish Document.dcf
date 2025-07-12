@@ -1,0 +1,10 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/1329212/4af5cc3d6f0e4f828072d3afe4ca41f0
+bundleId: https://api.rpubs.com/api/v1/document/1329212/4af5cc3d6f0e4f828072d3afe4ca41f0
+url: http://rpubs.com/andrew_mertens/1329212
+version: 1

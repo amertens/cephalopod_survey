@@ -1,0 +1,311 @@
+---
+title: "Octopuse survey results"
+author: "Andrew Mertens"
+date: "2025-07-12"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+rm(list=ls())
+library(tidyverse)
+library(here)
+library(table1)
+library(DT)
+
+d <- readRDS(here("data", "cleaned_octopus_farming_data.RDS"))
+colnames(d)
+dput(colnames(d))
+```
+
+
+## Explore demographics by country
+
+```{r}
+table1(~ Gender + Age + dAGE + URBANRURAL + income_cat | COUNTRY, data=d, transpose=TRUE)
+```
+
+
+
+
+## Explore opinions by country
+
+```{r}
+table1(~ Q1_awareness + Q2_support + Q4_welfare_knowledge + Q4_environmental_knowledge + Q4_economic_knowledge + 
+         Q4_sentience_knowledge + Q4_public_health_knowledge + Q5_consumption_frequency + Q6_impact_on_consumption + 
+         Q7_ban_farming_support + Q7_ban_sale_support + Q7_ban_subsidies_support + Q9_vote_candidate_support| COUNTRY, data=d, transpose=FALSE)
+```
+
+
+
+## Explore demographics by message
+
+```{r}
+table1(~ Gender + Age + dAGE + URBANRURAL + income_cat | message, data=d, transpose=FALSE)
+```
+
+## Explore opinions by message
+
+```{r}
+table1(~ Q1_awareness + Q2_support + Q4_welfare_knowledge + Q4_environmental_knowledge + Q4_economic_knowledge + 
+         Q4_sentience_knowledge + Q4_public_health_knowledge + Q5_consumption_frequency + Q6_impact_on_consumption + 
+         Q7_ban_farming_support + Q7_ban_sale_support + Q7_ban_subsidies_support + Q9_vote_candidate_support| message, data=d, transpose=FALSE)
+```
+
+## Explore opinions by message - coded as continious
+
+```{r}
+
+d[d=="Don't know"] <- NA
+
+d <- d %>%
+  mutate(Q1_awareness=as.numeric(Q1_awareness),
+         Q2_support=as.numeric(Q2_support),
+         Q4_welfare_knowledge=as.numeric(Q4_welfare_knowledge),
+         Q4_environmental_knowledge=as.numeric(Q4_environmental_knowledge),
+         Q4_economic_knowledge=as.numeric(Q4_economic_knowledge),
+         Q4_sentience_knowledge=as.numeric(Q4_sentience_knowledge),
+         Q4_public_health_knowledge=as.numeric(Q4_public_health_knowledge),
+         Q5_consumption_frequency=as.numeric(Q5_consumption_frequency),
+         Q6_impact_on_consumption=as.numeric(Q6_impact_on_consumption),
+         Q7_ban_farming_support=as.numeric(Q7_ban_farming_support),
+         Q7_ban_sale_support=as.numeric(Q7_ban_sale_support),
+         Q7_ban_subsidies_support=as.numeric(Q7_ban_subsidies_support),
+         Q9_vote_candidate_support=as.numeric(Q9_vote_candidate_support))
+table1(~ Q1_awareness + Q2_support + Q4_welfare_knowledge + Q4_environmental_knowledge + Q4_economic_knowledge + 
+         Q4_sentience_knowledge + Q4_public_health_knowledge + Q5_consumption_frequency + Q6_impact_on_consumption + 
+         Q7_ban_farming_support + Q7_ban_sale_support + Q7_ban_subsidies_support + Q9_vote_candidate_support| message, data=d, transpose=FALSE)
+```
+
+
+
+## Primary results- effects of message conditions adjusting for covariates
+
+
+```{r}
+
+res_ban_farming_adj = readRDS(here("results/res_farming_unadj.rds"))
+res_ban_sale_adj = readRDS(here("results/res_sale_unadj.rds"))
+res_ban_subsidies_adj = readRDS(here("results/res_subsidies_unadj.rds"))
+
+ggplot(res_ban_farming_adj, aes(x=Y, y=`Coef.`)) + geom_point() +
+  geom_errorbar(aes(ymin=`2.5%`, ymax=`97.5%`), width=0.2) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Farming Octopuses",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+
+#datatable(res_ban_farming_adj, options = list(pageLength = 5, autoWidth = TRUE))
+knitr::kable(res_ban_farming_adj, digits=2)
+
+
+ggplot(res_ban_sale_adj, aes(x=Y, y=`Coef.`)) + geom_point() +
+  geom_errorbar(aes(ymin=`2.5%`, ymax=`97.5%`), width=0.2) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Sale of Octopuses",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+#datatable(res_ban_sale_adj, options = list(pageLength = 5, autoWidth = TRUE))
+knitr::kable(res_ban_sale_adj, digits=2)
+
+ggplot(res_ban_subsidies_adj, aes(x=Y, y=`Coef.`)) + geom_point() +
+  geom_errorbar(aes(ymin=`2.5%`, ymax=`97.5%`), width=0.2) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Subsidies",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+#datatable(res_ban_subsidies_adj, options = list(pageLength = 5, autoWidth = TRUE))
+knitr::kable(res_ban_subsidies_adj, digits=2)
+
+```
+
+
+## Secondary results- secondary message contrasts
+
+```{r}
+res_ban_farming_adj = readRDS(here("results/res_farming_secondary.rds"))
+res_ban_sale_adj = readRDS(here("results/res_sale_secondary.rds"))
+res_ban_subsidies_adj = readRDS(here("results/res_subsidies_secondary.rds"))
+
+ggplot(res_ban_farming_adj, aes(x=contrast, y=`Coef.`)) + geom_point() +
+  geom_errorbar(aes(ymin=`2.5%`, ymax=`97.5%`), width=0.2) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Farming Octopuses",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+
+ggplot(res_ban_sale_adj, aes(x=contrast, y=`Coef.`)) + geom_point() +
+  geom_errorbar(aes(ymin=`2.5%`, ymax=`97.5%`), width=0.2) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Sale of Octopuses",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+
+ggplot(res_ban_subsidies_adj, aes(x=contrast, y=`Coef.`)) + geom_point() +
+  geom_errorbar(aes(ymin=`2.5%`, ymax=`97.5%`), width=0.2) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Subsidies",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+```
+
+
+## Secondary analysis- country-specific message effects
+
+```{r}
+
+res_ban_farming_subgroup = readRDS(here("results/res_farming_subgroup.rds"))
+res_ban_sale_subgroup = readRDS(here("results/res_sale_subgroup.rds"))
+res_ban_subsidies_subgroup = readRDS(here("results/res_subsidies_subgroup.rds"))
+
+ggplot(res_ban_farming_subgroup, aes(x=Country, y=est, group=tr, color=tr)) + geom_point(position = position_dodge(0.5)) +
+  geom_errorbar(aes(ymin=est.lb, ymax=est.ub), width=0.2, position = position_dodge(0.5)) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Farming Octopuses",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+
+ggplot(res_ban_sale_subgroup, aes(x=Country, y=est, group=tr, color=tr)) + 
+  geom_point(position = position_dodge(0.5)) +
+  geom_errorbar(aes(ymin=est.lb, ymax=est.ub), width=0.2, position = position_dodge(0.5)) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Sale of Octopuses",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+
+ggplot(res_ban_subsidies_subgroup, aes(x=Country, y=est, group=tr, color=tr)) + 
+    geom_point(position = position_dodge(0.5)) +
+  geom_errorbar(aes(ymin=est.lb, ymax=est.ub), width=0.2, position = position_dodge(0.5)) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Subsidies",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+
+
+
+```
+
+
+## Variable importance analysis- multivariate associations
+
+```{r}
+plotdf_Y1 = readRDS(here("results/res_farm_vim_glm.rds"))
+plotdf_Y2 = readRDS(here("results/res_sale_vim_glm.rds"))
+plotdf_Y3 = readRDS(here("results/res_subsidies_vim_glm.rds"))
+
+ggplot(plotdf_Y1, aes(x=X, y=est )) + geom_point() +
+  geom_errorbar(aes(ymin=ci.lb, ymax=ci.ub), width=0.5) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Support for octopus farm ban",
+    x="Covariate",
+    y="Estimated Effect (95% CI)") +
+  coord_flip() +theme_minimal() 
+
+ggplot(plotdf_Y2, aes(x=X, y=est )) + geom_point() +
+  geom_errorbar(aes(ymin=ci.lb, ymax=ci.ub), width=0.5) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Support for octopus sale ban",
+    x="Covariate",
+    y="Estimated Effect (95% CI)") +
+  coord_flip() +theme_minimal() 
+
+ggplot(plotdf_Y3, aes(x=X, y=est )) + geom_point() +
+  geom_errorbar(aes(ymin=ci.lb, ymax=ci.ub), width=0.5) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Support for ban on subsidies",
+    x="Covariate",
+    y="Estimated Effect (95% CI)") +
+  coord_flip() +theme_minimal() 
+
+```
+
+## Sensitivity results- Variable importance analysis- bivariate associations
+
+```{r}
+plotdf_Y1 = readRDS(here("results/res_farm_vim_bivariate.rds"))
+plotdf_Y2 = readRDS(here("results/res_sale_vim_bivariate.rds"))
+plotdf_Y3 = readRDS(here("results/res_subsidies_vim_bivariate.rds"))
+
+ggplot(plotdf_Y1, aes(x=X, y=est )) + geom_point() +
+  geom_errorbar(aes(ymin=ci.lb, ymax=ci.ub), width=0.5) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Support for octopus farm ban",
+    x="Covariate",
+    y="Estimated Effect (95% CI)") +
+  coord_flip() +theme_minimal() 
+
+ggplot(plotdf_Y2, aes(x=X, y=est )) + geom_point() +
+  geom_errorbar(aes(ymin=ci.lb, ymax=ci.ub), width=0.5) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Support for octopus sale ban",
+    x="Covariate",
+    y="Estimated Effect (95% CI)") +
+  coord_flip() +theme_minimal() 
+
+ggplot(plotdf_Y3, aes(x=X, y=est )) + geom_point() +
+  geom_errorbar(aes(ymin=ci.lb, ymax=ci.ub), width=0.5) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Support for ban on subsidies",
+    x="Covariate",
+    y="Estimated Effect (95% CI)") +
+  coord_flip() +theme_minimal() 
+
+```
+
+## Sensitivity results- unadjusted effects of message conditions 
+
+```{r}
+
+res_ban_farming_unadj = readRDS(here("results/res_farming_unadj.rds"))
+res_ban_sale_unadj = readRDS(here("results/res_sale_unadj.rds"))
+res_ban_subsidies_unadj = readRDS(here("results/res_subsidies_unadj.rds"))
+
+ggplot(res_ban_farming_unadj, aes(x=Y, y=`Coef.`)) + geom_point() +
+  geom_errorbar(aes(ymin=`2.5%`, ymax=`97.5%`), width=0.2) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Farming Octopuses",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+
+ggplot(res_ban_sale_unadj, aes(x=Y, y=`Coef.`)) + geom_point() +
+  geom_errorbar(aes(ymin=`2.5%`, ymax=`97.5%`), width=0.2) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Sale of Octopuses",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+
+ggplot(res_ban_subsidies_unadj, aes(x=Y, y=`Coef.`)) + geom_point() +
+  geom_errorbar(aes(ymin=`2.5%`, ymax=`97.5%`), width=0.2) +
+  geom_hline(yintercept=0, linetype="dashed", color="red") +
+  labs(title="Effect of Message on Support\nfor Ban on Subsidies",
+       x="Message Condition",
+       y="Estimated Effect (95% CI)") +
+  coord_flip() +
+  theme_minimal() 
+
+```
+
