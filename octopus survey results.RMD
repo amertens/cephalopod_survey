@@ -1,12 +1,13 @@
 ---
-title: "Octopuse survey results"
+title: "Octopus survey results"
 author: "Andrew Mertens"
 date: "2025-07-12"
-output: html_document
+output:
+  html_document: default
 ---
 
 
-```{r setup, include=FALSE}
+```{r setupALSE}
 knitr::opts_chunk$set(echo = FALSE)
 
 rm(list=ls())
@@ -14,6 +15,7 @@ library(tidyverse)
 library(here)
 library(table1)
 library(DT)
+library(flextable)
 
 d <- readRDS(here("data", "cleaned_octopus_farming_data.RDS"))
 colnames(d)
@@ -38,6 +40,86 @@ table1(~ Q1_awareness + Q2_support + Q4_welfare_knowledge + Q4_environmental_kno
          Q7_ban_farming_support + Q7_ban_sale_support + Q7_ban_subsidies_support + Q9_vote_candidate_support| COUNTRY, data=d, transpose=FALSE)
 ```
 
+
+## Explore support by country
+
+
+```{r}
+
+
+# [1] Neutral / No opinion Strongly oppose      Slightly support    
+# [4] Moderately support   Don't know           Moderately oppose   
+# [7] Strongly support     Slightly oppose 
+
+d <- d %>%
+  mutate(support = case_when(
+    Q2_support == "Strongly support" ~ "Support",
+    Q2_support == "Moderately support" ~ "Support",
+    Q2_support == "Slightly support" ~ "Support",
+    Q2_support == "Neutral / No opinion" ~ "Neutral/Don't know",
+    Q2_support == "Don't know" ~ "Neutral/Don't know",
+    Q2_support == "Slightly oppose" ~ "Oppose",
+    Q2_support == "Moderately oppose" ~ "Oppose",
+    Q2_support == "Strongly oppose" ~ "Oppose"),
+    
+    ban_farming_support = case_when(
+    Q7_ban_farming_support == "Strongly support" ~ "Support",
+    Q7_ban_farming_support == "Moderately support" ~ "Support",
+    Q7_ban_farming_support == "Slightly support" ~ "Support",
+    Q7_ban_farming_support == "Neutral / No opinion" ~ "Neutral/Don't know",
+    Q7_ban_farming_support == "Don't know" ~ "Neutral/Don't know",
+    Q7_ban_farming_support == "Slightly oppose" ~ "Oppose",
+    Q7_ban_farming_support == "Moderately oppose" ~ "Oppose",
+    Q7_ban_farming_support == "Strongly oppose" ~ "Oppose"),
+    
+    ban_sale_support = case_when(
+    Q7_ban_sale_support == "Strongly support" ~ "Support",
+    Q7_ban_sale_support == "Moderately support" ~ "Support",
+    Q7_ban_sale_support == "Slightly support" ~ "Support",
+    Q7_ban_sale_support == "Neutral / No opinion" ~ "Neutral/Don't know",
+    Q7_ban_sale_support == "Don't know" ~ "Neutral/Don't know",
+    Q7_ban_sale_support == "Slightly oppose" ~ "Oppose",
+    Q7_ban_sale_support == "Moderately oppose" ~ "Oppose",
+    Q7_ban_sale_support == "Strongly oppose" ~ "Oppose"),
+    
+    ban_subsidies_support = case_when(
+    Q7_ban_sale_support == "Strongly support" ~ "Support",
+    Q7_ban_sale_support == "Moderately support" ~ "Support",
+    Q7_ban_sale_support == "Slightly support" ~ "Support",
+    Q7_ban_sale_support == "Neutral / No opinion" ~ "Neutral/Don't know",
+    Q7_ban_sale_support == "Don't know" ~ "Neutral/Don't know",
+    Q7_ban_sale_support == "Slightly oppose" ~ "Oppose",
+    Q7_ban_sale_support == "Moderately oppose" ~ "Oppose",
+    Q7_ban_sale_support == "Strongly oppose" ~ "Oppose")
+  )
+
+
+
+cat("Support farming octopuses(pre-message):\n")
+tab=round(prop.table(table(d$support))*100,1)
+knitr::kable((tab))
+tab=round(prop.table(table(d$COUNTRY, d$support),1)*100,1) 
+knitr::kable(as.data.frame.matrix(tab) %>% arrange(Support))
+
+cat("Support for ban on farming octopuses (post-message): \n")
+tab=round(prop.table(table(d$ban_farming_support))*100,1)
+knitr::kable((tab) )
+tab=round(prop.table(table(d$COUNTRY, d$ban_farming_support),1)*100,1)
+knitr::kable(as.data.frame.matrix(tab) %>% arrange(Support))
+
+cat("Support for ban on sale of octopuses (post-message): \n")
+tab=round(prop.table(table(d$ban_sale_support))*100,1)
+knitr::kable((tab))
+tab=round(prop.table(table(d$COUNTRY, d$ban_sale_support),1)*100,1)
+knitr::kable(as.data.frame.matrix(tab) %>% arrange(Support))
+
+cat("Support for ban on subsidies (post-message): \n")
+tab=round(prop.table(table(d$ban_subsidies_support))*100,1)
+knitr::kable((tab))
+tab=round(prop.table(table(d$COUNTRY, d$ban_subsidies_support),1)*100,1)
+knitr::kable(as.data.frame.matrix(tab) %>% arrange(Support))
+
+```
 
 
 ## Explore demographics by message

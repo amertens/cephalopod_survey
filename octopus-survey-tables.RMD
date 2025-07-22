@@ -1,0 +1,116 @@
+---
+title: "Octopus survey results"
+author: "Andrew Mertens"
+date: "2025-07-12"
+output: 
+  officedown::rdocx_document:
+    page_margins:
+      bottom: 0.5
+      top: 0.5
+      right: 0.5
+      left: 0.5
+
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, cache = TRUE, fig.width = 8, fig.height = 6)
+
+rm(list=ls())
+library(tidyverse)
+library(here)
+library(table1)
+library(DT)
+library(flextable)
+library(gtsummary)
+library(officer)
+library(officedown)
+
+
+
+d <- readRDS(here("data", "cleaned_octopus_farming_data.RDS"))
+colnames(d)
+dput(colnames(d))
+```
+
+
+## Explore demographics by country
+
+```{r}
+
+tbl_summary(
+  data = d,
+  include = c(Gender, Age, dAGE, URBANRURAL, income_cat),
+  by = COUNTRY,
+  type = list(Age ~ "continuous")
+) %>%
+  add_p() %>%
+  as_flex_table() %>%
+  fontsize(size = 6, part = "all") %>%       # Very small text
+  line_spacing(space = 0.8, part = "all") %>% # Reduce line spacing
+  padding(padding = 2, part = "all") %>%     # Reduce padding
+  autofit()
+
+```
+
+
+## Explore demographics by message
+
+```{r}
+
+tbl_summary(
+  data = d,
+  include = c(Gender, Age, dAGE, URBANRURAL, income_cat),
+  by = message,
+  type = list(Age ~ "continuous")
+) %>%
+  add_p() %>%
+  as_flex_table() %>%
+  fontsize(size = 6, part = "all") %>%       # Very small text
+  line_spacing(space = 0.8, part = "all") %>% # Reduce line spacing
+  padding(padding = 2, part = "all") %>%     # Reduce padding
+  autofit()
+
+```
+
+## Explore opinions by country
+
+
+```{r}
+
+tbl_summary(
+  data = d,
+  include = c(Q1_awareness, Q2_support, Q4_welfare_knowledge, Q4_environmental_knowledge, Q4_economic_knowledge, 
+         Q4_sentience_knowledge, Q4_public_health_knowledge, Q5_consumption_frequency, Q6_impact_on_consumption, 
+         Q7_ban_farming_support, Q7_ban_sale_support, Q7_ban_subsidies_support, Q9_vote_candidate_support),
+  by = COUNTRY) %>%
+  add_p() %>%
+  as_flex_table() %>%
+  fontsize(size = 6, part = "all") %>%       # Very small text
+  line_spacing(space = 0.8, part = "all") %>% # Reduce line spacing
+  padding(padding = 2, part = "all") %>%     # Reduce padding
+  autofit()
+
+```
+
+
+## Explore opinions by message
+
+
+```{r}
+
+tbl_summary(
+  data = d,
+  include = c(Q1_awareness, Q2_support, Q4_welfare_knowledge, Q4_environmental_knowledge, Q4_economic_knowledge, 
+         Q4_sentience_knowledge, Q4_public_health_knowledge, Q5_consumption_frequency, Q6_impact_on_consumption, 
+         Q7_ban_farming_support, Q7_ban_sale_support, Q7_ban_subsidies_support, Q9_vote_candidate_support),
+  by = message) %>%
+  add_p() %>%
+  as_flex_table() %>%
+  fontsize(size = 6, part = "all") %>%       # Very small text
+  line_spacing(space = 0.8, part = "all") %>% # Reduce line spacing
+  padding(padding = 2, part = "all") %>%     # Reduce padding
+  autofit()
+
+```
+
