@@ -11,7 +11,6 @@ d <- read.csv(here("data", "Octopus Farming - FINAL DATA - 030725.csv"))
 table(d$CONSENT)
 table(is.na(d$CONSENT))
 
-
 #-------------------------------------------------------------------------------
 # check messaging condition
 #-------------------------------------------------------------------------------
