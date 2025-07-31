@@ -304,6 +304,28 @@ plotdf_Y1 = readRDS(here("results/res_farm_vim_glm.rds"))
 plotdf_Y2 = readRDS(here("results/res_sale_vim_glm.rds"))
 plotdf_Y3 = readRDS(here("results/res_subsidies_vim_glm.rds"))
 
+
+clean_df <- function(d){
+  d$X = gsub("_"," ",d$X) 
+  d$X = gsub("  "," ",d$X) 
+  d$X = gsub("Q1 ","",d$X) 
+  d$X = gsub("Q2 ","",d$X) 
+  d$X = gsub("Q4 ","",d$X) 
+  d$X = gsub("Q6 ","",d$X) 
+  d$X = gsub("Q5 ","",d$X) 
+  d$X = gsub("COUNTRY","Country",d$X) 
+  d$X = gsub("dAGE","Age",d$X) 
+  d$X = gsub("dAGE","Age",d$X) 
+  d$X = gsub("URBANRURAL: ","Location: ",d$X) 
+  d$X = gsub("income_cat","Income",d$X) 
+  d$X =str_to_title(d$X)
+  return(d)
+}
+
+plotdf_Y1 = clean_df(plotdf_Y1)
+plotdf_Y2 = clean_df(plotdf_Y2)
+plotdf_Y3 = clean_df(plotdf_Y3)
+
 ggplot(plotdf_Y1, aes(x=X, y=est )) + geom_point() +
   geom_errorbar(aes(ymin=ci.lb, ymax=ci.ub), width=0.5) +
   geom_hline(yintercept=0, linetype="dashed", color="red") +
@@ -337,22 +359,7 @@ plotdf_Y1 = readRDS(here("results/res_farm_vim_bivariate.rds"))
 plotdf_Y2 = readRDS(here("results/res_sale_vim_bivariate.rds"))
 plotdf_Y3 = readRDS(here("results/res_subsidies_vim_bivariate.rds"))
 
-clean_df <- function(d){
-  d$X = gsub("_"," ",d$X) 
-  d$X = gsub("  "," ",d$X) 
-  d$X = gsub("Q1_","",d$X) 
-  d$X = gsub("Q2_","",d$X) 
-  d$X = gsub("Q4_","",d$X) 
-  d$X = gsub("Q6_","",d$X) 
-  d$X = gsub("Q5_","",d$X) 
-  d$X = gsub("COUNTRY","Country",d$X) 
-  d$X = gsub("dAGE","Age",d$X) 
-  d$X = gsub("dAGE","Age",d$X) 
-  d$X = gsub("URBANRURAL: ","Location: ",d$X) 
-  d$X = gsub("income_cat","Income",d$X) 
-  d$X =str_to_sentence(d$X)
-  return(d)
-}
+
 
 plotdf_Y1 = clean_df(plotdf_Y1)
 plotdf_Y2 = clean_df(plotdf_Y2)
@@ -423,6 +430,48 @@ ggplot(res_ban_subsidies_unadj, aes(x=Y, y=`Coef.`)) + geom_point() +
        y="Estimated Effect (95% CI)") +
   coord_flip() +
   theme_minimal() 
+
+```
+
+
+## Sensitivity results- comparing age and sex distributions by country to EU census
+
+-comparing against Eurostat 2024 data. Below is the summary of the ratio of survey proportions to EU proptions, with the IQR being a small range of  0.9716 to  1.0667, showing most strata are very representative, as seen in the heatmap. The cells that are off are the older ages generally (which probably reflects the fact that older people are less likely to use social media, and thus less likely to be surveyed). Note UK is not in the EU data anymore because of Brexit.
+
+
+```{r, echo=FALSE}
+
+res_ban_farming_unadj = readRDS(here("results/res_farming_unadj.rds"))
+merged = read.csv(here("results/survey_vs_population_representativeness.csv"))
+
+
+print(summary(merged$representation_ratio))
+
+# Step 1: Use the merged data (after join and ratio calculation)
+# If you've already run up to `merged <- ...`, use this:
+
+heat_data <- merged %>%
+  mutate(
+    label = paste0(country, " (", sex, ")"),
+    label = fct_reorder(label, as.numeric(factor(country))*10 + ifelse(sex == "F", 1, 0))
+  ) %>%
+  select(label, age_band, representation_ratio)
+
+# Step 2: Plot
+ggplot(heat_data, aes(x = age_band, y = label, fill = representation_ratio)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient2(low = "firebrick", mid = "white", high = "steelblue",
+                       midpoint = 1, limits = c(0.5, 1.5), oob = scales::squish,
+                       name = "Survey / Census") +
+  labs(
+    title = "Survey Representativeness vs Census Weights (by Sex × Age × Country)",
+    x = "Age Band", y = "Country (Sex)"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    panel.grid = element_blank()
+  )
 
 ```
 

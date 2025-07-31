@@ -1,5 +1,4 @@
 
-"C:\Users\andre\OneDrive\Documents\cephalopod_survey\data\age_sex_samples.csv"
 
 d <- read.csv(here("data", "Octopus Farming - FINAL DATA - 030725.csv"))
 weights <- read.csv(here("data", "survey_weights_2024_EU14.csv"))
@@ -78,6 +77,8 @@ representation_table <- merged %>%
 print(representation_table, n = Inf)
 
 library(forcats)
+
+summary(merged$representation_ratio)
 
 # Step 1: Use the merged data (after join and ratio calculation)
 # If you've already run up to `merged <- ...`, use this:
