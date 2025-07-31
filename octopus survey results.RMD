@@ -83,14 +83,14 @@ d <- d %>%
     Q7_ban_sale_support == "Strongly oppose" ~ "Oppose"),
     
     ban_subsidies_support = case_when(
-    Q7_ban_sale_support == "Strongly support" ~ "Support",
-    Q7_ban_sale_support == "Moderately support" ~ "Support",
-    Q7_ban_sale_support == "Slightly support" ~ "Support",
-    Q7_ban_sale_support == "Neutral / No opinion" ~ "Neutral/Don't know",
-    Q7_ban_sale_support == "Don't know" ~ "Neutral/Don't know",
-    Q7_ban_sale_support == "Slightly oppose" ~ "Oppose",
-    Q7_ban_sale_support == "Moderately oppose" ~ "Oppose",
-    Q7_ban_sale_support == "Strongly oppose" ~ "Oppose")
+    Q7_ban_subsidies_support == "Strongly support" ~ "Support",
+    Q7_ban_subsidies_support == "Moderately support" ~ "Support",
+    Q7_ban_subsidies_support == "Slightly support" ~ "Support",
+    Q7_ban_subsidies_support == "Neutral / No opinion" ~ "Neutral/Don't know",
+    Q7_ban_subsidies_support == "Don't know" ~ "Neutral/Don't know",
+    Q7_ban_subsidies_support == "Slightly oppose" ~ "Oppose",
+    Q7_ban_subsidies_support == "Moderately oppose" ~ "Oppose",
+    Q7_ban_subsidies_support == "Strongly oppose" ~ "Oppose")
   )
 
 
