@@ -168,9 +168,9 @@ table1(~ Q1_awareness + Q2_support + Q4_welfare_knowledge + Q4_environmental_kno
 
 ```{r}
 
-res_ban_farming_adj = readRDS(here("results/res_farming_unadj.rds"))
-res_ban_sale_adj = readRDS(here("results/res_sale_unadj.rds"))
-res_ban_subsidies_adj = readRDS(here("results/res_subsidies_unadj.rds"))
+res_ban_farming_adj = readRDS(here("results/res_farming_adj.rds"))
+res_ban_sale_adj = readRDS(here("results/res_sale_adj.rds"))
+res_ban_subsidies_adj = readRDS(here("results/res_subsidies_adj.rds"))
 
 res_ban_farming_adj$Y = gsub("tr","",res_ban_farming_adj$Y)
 res_ban_sale_adj$Y = gsub("tr","",res_ban_sale_adj$Y)

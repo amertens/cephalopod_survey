@@ -1,0 +1,73 @@
+---
+title: "Octopus survey interaction analysis"
+author: "Andrew Mertens"
+date: "2025-08-17"
+output:
+  html_document: default
+---
+
+
+```{r setupALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+rm(list=ls())
+library(tidyverse)
+library(here)
+library(table1)
+library(DT)
+library(flextable)
+
+
+res_URBANRURAL_subgroup = readRDS(here("results/res_URBANRURAL_subgroup.rds"))
+res_Gender_subgroup = readRDS(here("results/res_Gender_subgroup.rds"))
+res_Age_subgroup = readRDS(here("results/res_Age_subgroup.rds"))
+res_income_cat_subgroup = readRDS(here("results/res_income_cat_subgroup.rds"))
+
+# ban_farming_subgroup, aes(x=Country, y=est, group=tr, color=tr)) + geom_point(position = position_dodge(0.5)) +
+#   geom_errorbar(aes(ymin=est.lb, ymax=est.ub), width=0.2, position = position_dodge(0.5)) +
+#   geom_hline(yintercept=0, linetype="dashed", color="red") +
+#   labs(title="Effect of Message on Support\nfor Ban on Farming Octopuses",
+#        x="Message Condition",
+#        y="Estimated Effect (95% CI)") +
+#   coord_flip() +
+#   theme_minimal() 
+
+
+res_URBANRURAL_subgroup$p_farming
+knitr::kable(res_URBANRURAL_subgroup$res_ban_farming_subgroup, digits=2)
+
+res_URBANRURAL_subgroup$p_sale
+knitr::kable(res_URBANRURAL_subgroup$res_ban_sale_subgroup, digits=2)
+
+res_URBANRURAL_subgroup$p_subsidies
+knitr::kable(res_URBANRURAL_subgroup$res_ban_subsidies_subgroup, digits=2)
+
+res_income_cat_subgroup$p_farming
+knitr::kable(res_income_cat_subgroup$res_ban_farming_subgroup, digits=2)
+
+res_income_cat_subgroup$p_sale
+knitr::kable(res_income_cat_subgroup$res_ban_sale_subgroup, digits=2)
+
+res_income_cat_subgroup$p_subsidies
+knitr::kable(res_income_cat_subgroup$res_ban_subsidies_subgroup, digits=2)
+
+res_Gender_subgroup$p_farming
+knitr::kable(res_Gender_subgroup$res_ban_farming_subgroup, digits=2)
+
+res_Gender_subgroup$p_sale
+knitr::kable(res_Gender_subgroup$res_ban_sale_subgroup, digits=2)
+
+res_Gender_subgroup$p_subsidies
+knitr::kable(res_Gender_subgroup$res_ban_subsidies_subgroup, digits=2)
+
+res_Age_subgroup$p_farming
+knitr::kable(res_Age_subgroup$res_ban_farming_subgroup, digits=2)
+
+res_Age_subgroup$p_sale
+knitr::kable(res_Age_subgroup$res_ban_sale_subgroup, digits=2)
+
+res_Age_subgroup$p_subsidies
+knitr::kable(res_Age_subgroup$res_ban_subsidies_subgroup, digits=2)
+
+```
+

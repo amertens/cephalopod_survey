@@ -23,8 +23,10 @@ d$Q7_ban_subsidies_support <- as.numeric(d$Q7_ban_subsidies_support)
 d$id <- 1:nrow(d)
 d$income_cat
 
+cor.test(as.numeric(d$Q2_support), as.numeric(d$Q7_ban_farming_support), method = "pearson", adjust = "none")
 
 dput(colnames(d))
+
 
 Wvars=c("COUNTRY", "URBANRURAL", "income_cat", "Gender", 
         "Age", "Q1_awareness", "Q2_support", "Q4_welfare_knowledge", 
@@ -32,11 +34,18 @@ Wvars=c("COUNTRY", "URBANRURAL", "income_cat", "Gender",
         "Q4_public_health_knowledge", "Q5_consumption_frequency", "Q6_impact_on_consumption")
 
 run_cephalopod_subgroup <- function(d, Vvar){
-
+  
+  VLab = ""
+  if(Vvar=="COUNTRY"){VLab = "Country"}
+  if(Vvar=="URBANRURAL"){VLab = "Urban/Rural"}
+  if(Vvar=="income_cat"){VLab = "Income"}
+  if(Vvar=="Gender"){VLab = "Gender"}
+  if(Vvar=="Age"){VLab = "Age"}
+  
   res_ban_farming_subgroup = res_ban_sale_subgroup = res_ban_subsidies_subgroup = NULL
   
   for(i in c("Sentience + Wellfare", "Environmental", "Economics", "Public health")){
-
+    
     res_null1=washb_glm(Y=as.numeric(d$Q7_ban_farming_support), 
                         tr=d$message, pair = NULL, W=d %>% select(all_of(Wvars)),  id=d$id, contrast=c("Control",i), family = "gaussian")    
     res_temp1=washb_glm(Y=as.numeric(d$Q7_ban_farming_support), 
@@ -48,7 +57,7 @@ run_cephalopod_subgroup <- function(d, Vvar){
     res_temp1$tr <- i
     res_temp1$int.pval <- lr_res1$`Pr(>Chisq)`[2]
     res_ban_farming_subgroup = rbind(res_ban_farming_subgroup, res_temp1)
-
+    
     res_null2=washb_glm(Y=as.numeric(d$Q7_ban_sale_support), 
                         tr=d$message, pair = NULL, W=d %>% select(all_of(Wvars)),  id=d$id, contrast=c("Control",i), family = "gaussian")
     res_temp2=washb_glm(Y=as.numeric(d$Q7_ban_sale_support), 
@@ -69,8 +78,8 @@ run_cephalopod_subgroup <- function(d, Vvar){
     lr_res3=lmtest::lrtest(res_temp3$glmModel, res_null3$glmModel)
     res_temp3=res_temp3$lincom
     colnames(res_temp3)[1] <- Vvar
-      res_temp3$tr <- i
-      res_temp3$int.pval <- lr_res3$`Pr(>Chisq)`[2]
+    res_temp3$tr <- i
+    res_temp3$int.pval <- lr_res3$`Pr(>Chisq)`[2]
     res_ban_subsidies_subgroup = rbind(res_ban_subsidies_subgroup, res_temp3)
   }
   
@@ -88,7 +97,7 @@ run_cephalopod_subgroup <- function(d, Vvar){
     geom_hline(yintercept=0, linetype="dashed", color="red") +
     facet_wrap(~tr) +
     labs(title="Effect of Message on Support\nfor Ban on Farming Octopuses",
-         x="Message Condition",
+         x=VLab,
          y="Estimated Effect (95% CI)") +
     coord_flip() +
     theme_minimal() 
@@ -98,7 +107,7 @@ run_cephalopod_subgroup <- function(d, Vvar){
     geom_hline(yintercept=0, linetype="dashed", color="red") +
     facet_wrap(~tr) +
     labs(title="Effect of Message on Support\nfor Ban on Sale of Octopuses",
-         x="Message Condition",
+         x=VLab,
          y="Estimated Effect (95% CI)") +
     coord_flip() +
     theme_minimal() 
@@ -108,7 +117,7 @@ run_cephalopod_subgroup <- function(d, Vvar){
     facet_wrap(~tr) +
     geom_hline(yintercept=0, linetype="dashed", color="red") +
     labs(title="Effect of Message on Support\nfor Ban on Subsidies",
-         x="Message Condition",
+         x=VLab,
          y="Estimated Effect (95% CI)") +
     coord_flip() +
     theme_minimal() 
@@ -147,21 +156,26 @@ res_income_cat_subgroup$p_farming
 res_Gender_subgroup$p_farming
 res_Age_subgroup$p_farming
 
-   
+
+saveRDS(res_URBANRURAL_subgroup, file=here("results/res_URBANRURAL_subgroup.rds"))
+saveRDS(res_income_cat_subgroup, file=here("results/res_income_cat_subgroup.rds"))
+saveRDS(res_Gender_subgroup, file=here("results/res_Gender_subgroup.rds"))
+saveRDS(res_Age_subgroup, file=here("results/res_Age_subgroup.rds"))
+
 
 res_ban_farming_subgroup=res_country_subgroup$res_ban_farming_subgroup
 res_ban_subsidies_subgroup=res_country_subgroup$res_ban_subsidies_subgroup
 res_ban_sale_subgroup=res_country_subgroup$res_ban_sale_subgroup
 
-ggplot(res_ban_farming_subgroup, aes(x=Country, y=est, group=tr, color=tr)) + geom_point(position = position_dodge(0.5)) +
-  geom_errorbar(aes(ymin=est.lb, ymax=est.ub), width=0.2, position = position_dodge(0.5)) +
-  geom_hline(yintercept=0, linetype="dashed", color="red") +
-  labs(title="Effect of Message on Support\nfor Ban on Farming Octopuses",
-       x="Message Condition",
-       y="Estimated Effect (95% CI)") +
-  coord_flip() +
-  theme_minimal() 
-
+# ggplot(res_ban_farming_subgroup, aes(x=Country, y=est, group=tr, color=tr)) + geom_point(position = position_dodge(0.5)) +
+#   geom_errorbar(aes(ymin=est.lb, ymax=est.ub), width=0.2, position = position_dodge(0.5)) +
+#   geom_hline(yintercept=0, linetype="dashed", color="red") +
+#   labs(title="Effect of Message on Support\nfor Ban on Farming Octopuses",
+#        x="Message Condition",
+#        y="Estimated Effect (95% CI)") +
+#   coord_flip() +
+#   theme_minimal() 
+# 
 
 
 saveRDS(res_ban_farming_subgroup, file=here("results/res_farming_subgroup.rds"))
