@@ -394,7 +394,356 @@ res_Gender_subgroup = readRDS(here(&quot;results/res_Gender_subgroup.rds&quot;))
 res_Age_subgroup = readRDS(here(&quot;results/res_Age_subgroup.rds&quot;))
 res_income_cat_subgroup = readRDS(here(&quot;results/res_income_cat_subgroup.rds&quot;))
 
-# ban_farming_subgroup, aes(x=Country, y=est, group=tr, color=tr)) + geom_point(position = position_dodge(0.5)) +
+
+cat(&quot;Interaction Pvalues: Urban-Rural \n&quot;)</code></pre>
+<pre><code>## Interaction Pvalues: Urban-Rural</code></pre>
+<pre class="r"><code>knitr::kable(res_URBANRURAL_subgroup$res_int_pval, digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">URBANRURAL</th>
+<th align="left">tr</th>
+<th align="right">int.pval</th>
+<th align="left">Y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">City</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.504</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="even">
+<td align="left">City</td>
+<td align="left">Environmental</td>
+<td align="right">0.307</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="odd">
+<td align="left">City</td>
+<td align="left">Economics</td>
+<td align="right">0.050</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="even">
+<td align="left">City</td>
+<td align="left">Public health</td>
+<td align="right">0.688</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="odd">
+<td align="left">City</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.687</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="even">
+<td align="left">City</td>
+<td align="left">Environmental</td>
+<td align="right">0.576</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="odd">
+<td align="left">City</td>
+<td align="left">Economics</td>
+<td align="right">0.283</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="even">
+<td align="left">City</td>
+<td align="left">Public health</td>
+<td align="right">0.595</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="odd">
+<td align="left">City</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.599</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="even">
+<td align="left">City</td>
+<td align="left">Environmental</td>
+<td align="right">0.153</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="odd">
+<td align="left">City</td>
+<td align="left">Economics</td>
+<td align="right">0.125</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="even">
+<td align="left">City</td>
+<td align="left">Public health</td>
+<td align="right">0.757</td>
+<td align="left">ban subsidies</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>cat(&quot;Interaction Pvalues: Gender \n&quot;)</code></pre>
+<pre><code>## Interaction Pvalues: Gender</code></pre>
+<pre class="r"><code>knitr::kable(res_Gender_subgroup$res_int_pval, digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Gender</th>
+<th align="left">tr</th>
+<th align="right">int.pval</th>
+<th align="left">Y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Female+</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.783</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="even">
+<td align="left">Female+</td>
+<td align="left">Environmental</td>
+<td align="right">0.603</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="odd">
+<td align="left">Female+</td>
+<td align="left">Economics</td>
+<td align="right">0.568</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="even">
+<td align="left">Female+</td>
+<td align="left">Public health</td>
+<td align="right">0.947</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="odd">
+<td align="left">Female+</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.684</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="even">
+<td align="left">Female+</td>
+<td align="left">Environmental</td>
+<td align="right">0.538</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="odd">
+<td align="left">Female+</td>
+<td align="left">Economics</td>
+<td align="right">0.840</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="even">
+<td align="left">Female+</td>
+<td align="left">Public health</td>
+<td align="right">0.431</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="odd">
+<td align="left">Female+</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.727</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="even">
+<td align="left">Female+</td>
+<td align="left">Environmental</td>
+<td align="right">0.382</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="odd">
+<td align="left">Female+</td>
+<td align="left">Economics</td>
+<td align="right">0.822</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="even">
+<td align="left">Female+</td>
+<td align="left">Public health</td>
+<td align="right">0.718</td>
+<td align="left">ban subsidies</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>cat(&quot;Interaction Pvalues: Age \n&quot;)</code></pre>
+<pre><code>## Interaction Pvalues: Age</code></pre>
+<pre class="r"><code>knitr::kable(res_Age_subgroup$res_int_pval, digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Age</th>
+<th align="left">tr</th>
+<th align="right">int.pval</th>
+<th align="left">Y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">18-24</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.613</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="even">
+<td align="left">18-24</td>
+<td align="left">Environmental</td>
+<td align="right">0.817</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="odd">
+<td align="left">18-24</td>
+<td align="left">Economics</td>
+<td align="right">0.553</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="even">
+<td align="left">18-24</td>
+<td align="left">Public health</td>
+<td align="right">0.504</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="odd">
+<td align="left">18-24</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.164</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="even">
+<td align="left">18-24</td>
+<td align="left">Environmental</td>
+<td align="right">0.268</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="odd">
+<td align="left">18-24</td>
+<td align="left">Economics</td>
+<td align="right">0.359</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="even">
+<td align="left">18-24</td>
+<td align="left">Public health</td>
+<td align="right">0.170</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="odd">
+<td align="left">18-24</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.135</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="even">
+<td align="left">18-24</td>
+<td align="left">Environmental</td>
+<td align="right">0.291</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="odd">
+<td align="left">18-24</td>
+<td align="left">Economics</td>
+<td align="right">0.604</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="even">
+<td align="left">18-24</td>
+<td align="left">Public health</td>
+<td align="right">0.338</td>
+<td align="left">ban subsidies</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>cat(&quot;Interaction Pvalues: Income \n&quot;)</code></pre>
+<pre><code>## Interaction Pvalues: Income</code></pre>
+<pre class="r"><code>knitr::kable(res_income_cat_subgroup$res_int_pval, digits=3)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">income_cat</th>
+<th align="left">tr</th>
+<th align="right">int.pval</th>
+<th align="left">Y</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Low</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.201</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="even">
+<td align="left">Low</td>
+<td align="left">Environmental</td>
+<td align="right">0.558</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="odd">
+<td align="left">Low</td>
+<td align="left">Economics</td>
+<td align="right">0.792</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="even">
+<td align="left">Low</td>
+<td align="left">Public health</td>
+<td align="right">0.988</td>
+<td align="left">ban farming</td>
+</tr>
+<tr class="odd">
+<td align="left">Low</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.096</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="even">
+<td align="left">Low</td>
+<td align="left">Environmental</td>
+<td align="right">0.786</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="odd">
+<td align="left">Low</td>
+<td align="left">Economics</td>
+<td align="right">0.561</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="even">
+<td align="left">Low</td>
+<td align="left">Public health</td>
+<td align="right">0.918</td>
+<td align="left">ban sale</td>
+</tr>
+<tr class="odd">
+<td align="left">Low</td>
+<td align="left">Sentience + Wellfare</td>
+<td align="right">0.106</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="even">
+<td align="left">Low</td>
+<td align="left">Environmental</td>
+<td align="right">0.594</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="odd">
+<td align="left">Low</td>
+<td align="left">Economics</td>
+<td align="right">0.879</td>
+<td align="left">ban subsidies</td>
+</tr>
+<tr class="even">
+<td align="left">Low</td>
+<td align="left">Public health</td>
+<td align="right">0.737</td>
+<td align="left">ban subsidies</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># ban_farming_subgroup, aes(x=Country, y=est, group=tr, color=tr)) + geom_point(position = position_dodge(0.5)) +
 #   geom_errorbar(aes(ymin=est.lb, ymax=est.ub), width=0.2, position = position_dodge(0.5)) +
 #   geom_hline(yintercept=0, linetype=&quot;dashed&quot;, color=&quot;red&quot;) +
 #   labs(title=&quot;Effect of Message on Support\nfor Ban on Farming Octopuses&quot;,

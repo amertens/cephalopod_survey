@@ -259,9 +259,9 @@ ggplot(res_ban_subsidies_adj, aes(x=contrast, y=`Coef.`)) + geom_point() +
 
 ```{r}
 
-res_ban_farming_subgroup = readRDS(here("results/res_farming_subgroup.rds")) %>% rename(Message=tr)
-res_ban_sale_subgroup = readRDS(here("results/res_sale_subgroup.rds")) %>% rename(Message=tr)
-res_ban_subsidies_subgroup = readRDS(here("results/res_subsidies_subgroup.rds")) %>% rename(Message=tr)
+res_ban_farming_subgroup = readRDS(here("results/res_farming_subgroup.rds")) %>% rename(Message=tr, Country=COUNTRY)
+res_ban_sale_subgroup = readRDS(here("results/res_sale_subgroup.rds")) %>% rename(Message=tr, Country=COUNTRY)
+res_ban_subsidies_subgroup = readRDS(here("results/res_subsidies_subgroup.rds")) %>% rename(Message=tr, Country=COUNTRY)
 
 ggplot(res_ban_farming_subgroup, aes(x=Country, y=est, group=Message, color=Message)) + geom_point(position = position_dodge(0.5)) +
   geom_errorbar(aes(ymin=est.lb, ymax=est.ub), width=0.2, position = position_dodge(0.5)) +
@@ -464,7 +464,7 @@ ggplot(heat_data, aes(x = age_band, y = label, fill = representation_ratio)) +
                        midpoint = 1, limits = c(0.5, 1.5), oob = scales::squish,
                        name = "Survey / Census") +
   labs(
-    title = "Survey Representativeness vs Census Weights (by Sex × Age × Country)",
+    title = "Survey Representativeness vs Census Weights\n(by Sex × Age × Country)",
     x = "Age Band", y = "Country (Sex)"
   ) +
   theme_minimal(base_size = 12) +

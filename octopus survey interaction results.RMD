@@ -23,6 +23,18 @@ res_Gender_subgroup = readRDS(here("results/res_Gender_subgroup.rds"))
 res_Age_subgroup = readRDS(here("results/res_Age_subgroup.rds"))
 res_income_cat_subgroup = readRDS(here("results/res_income_cat_subgroup.rds"))
 
+
+cat("Interaction Pvalues: Urban-Rural \n")
+knitr::kable(res_URBANRURAL_subgroup$res_int_pval, digits=3)
+cat("Interaction Pvalues: Gender \n")
+knitr::kable(res_Gender_subgroup$res_int_pval, digits=3)
+cat("Interaction Pvalues: Age \n")
+knitr::kable(res_Age_subgroup$res_int_pval, digits=3)
+cat("Interaction Pvalues: Income \n")
+knitr::kable(res_income_cat_subgroup$res_int_pval, digits=3)
+
+
+
 # ban_farming_subgroup, aes(x=Country, y=est, group=tr, color=tr)) + geom_point(position = position_dodge(0.5)) +
 #   geom_errorbar(aes(ymin=est.lb, ymax=est.ub), width=0.2, position = position_dodge(0.5)) +
 #   geom_hline(yintercept=0, linetype="dashed", color="red") +

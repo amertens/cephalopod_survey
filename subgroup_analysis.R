@@ -90,7 +90,7 @@ run_cephalopod_subgroup <- function(d, Vvar){
   res_int_pval <- bind_rows(
     res_ban_farming_subgroup %>% distinct(int.pval, .keep_all = T) %>% select(!!(Vvar), tr, int.pval) %>% mutate(Y="ban farming"),
     res_ban_sale_subgroup %>% distinct(int.pval, .keep_all = T) %>% select(!!(Vvar), tr, int.pval) %>% mutate(Y="ban sale"),
-    res_ban_sale_subgroup %>% distinct(int.pval, .keep_all = T) %>% select(!!(Vvar), tr, int.pval) %>% mutate(Y="ban subsidies"))
+    res_ban_subsidies_subgroup %>% distinct(int.pval, .keep_all = T) %>% select(!!(Vvar), tr, int.pval) %>% mutate(Y="ban subsidies"))
   
   p_farming = ggplot(res_ban_farming_subgroup, aes(x=.data[[Vvar]], y=est)) + geom_point() +
     geom_errorbar(aes(ymin=est.lb, ymax=est.ub), width=0.2) +
